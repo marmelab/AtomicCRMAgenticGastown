@@ -130,13 +130,13 @@ const CompanyShowContent = () => {
                         smart_count: record.nb_contacts ?? 0,
                       })}
                 </TabsTrigger>
-                {record.nb_deals ? (
-                  <TabsTrigger value="deals">
-                    {translate("resources.companies.nb_deals", {
-                      smart_count: record.nb_deals ?? 0,
-                    })}
-                  </TabsTrigger>
-                ) : null}
+                <TabsTrigger value="deals">
+                  {record.nb_deals
+                    ? translate("resources.companies.nb_deals", {
+                        smart_count: record.nb_deals,
+                      })
+                    : translate("resources.deals.name", { smart_count: 2 })}
+                </TabsTrigger>
                 <TabsTrigger value="machines">Parc machines</TabsTrigger>
               </TabsList>
               <TabsContent value="activity" className="pt-2">
@@ -327,7 +327,6 @@ const CompanyMachinesTab = ({ companyId }: { companyId: string | number }) => {
       <ReferenceManyField
         reference="machines"
         target="company_id"
-        record={{ id: companyId } as any}
       >
         <CompanyMachinesDataTable />
       </ReferenceManyField>
