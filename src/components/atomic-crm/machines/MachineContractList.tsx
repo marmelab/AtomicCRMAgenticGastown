@@ -12,7 +12,7 @@ const STATUT_COLORS: Record<string, string> = {
 };
 
 export const MachineContractList = ({ machineId }: { machineId: string | number }) => {
-  const { data: contracts } = useGetList<MachineContract>("machine_contracts", {
+  const { data: contracts, isPending } = useGetList<MachineContract>("machine_contracts", {
     pagination: { page: 1, perPage: 10 },
     sort: { field: "date_renouvellement", order: "ASC" },
     filter: { "machine_id@eq": machineId },
@@ -28,7 +28,9 @@ export const MachineContractList = ({ machineId }: { machineId: string | number 
           </Button>
         </Link>
       </div>
-      {!contracts?.length ? (
+      {isPending ? (
+        <p className="text-xs text-muted-foreground">Chargement...</p>
+      ) : !contracts?.length ? (
         <p className="text-xs text-muted-foreground">Aucun contrat.</p>
       ) : (
         <div className="space-y-1">

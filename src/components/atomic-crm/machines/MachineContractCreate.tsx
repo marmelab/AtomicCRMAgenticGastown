@@ -5,7 +5,7 @@ import { FormToolbar } from "../layout/FormToolbar";
 import { MachineContractInputs } from "./MachineContractInputs";
 
 export const MachineContractCreate = () => (
-  <CreateBase redirect="list">
+  <CreateBase redirect={false}>
     <div className="mt-2 flex lg:mr-72">
       <div className="flex-1">
         <Form defaultValues={{}}>
