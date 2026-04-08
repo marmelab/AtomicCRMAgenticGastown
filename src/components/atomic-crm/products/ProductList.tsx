@@ -8,7 +8,7 @@ import { TopToolbar } from "../layout/TopToolbar";
 
 const ProductListActions = () => (
   <TopToolbar>
-    <CreateButton label="Nouveau modèle" />
+    <CreateButton label="resources.products.action.new" />
   </TopToolbar>
 );
 

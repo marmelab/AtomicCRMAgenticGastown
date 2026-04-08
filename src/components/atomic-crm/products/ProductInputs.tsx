@@ -10,6 +10,6 @@ export const ProductInputs = () => (
     <TextInput source="nom_commercial" validate={required()} helperText={false} />
     <NumberInput source="prix_ht" validate={required()} min={0} helperText={false} />
     <TextInput source="description" multiline rows={3} helperText={false} />
-    <BooleanInput source="active" helperText={false} defaultValue={true} />
+    <BooleanInput source="active" helperText={false} />
   </div>
 );
