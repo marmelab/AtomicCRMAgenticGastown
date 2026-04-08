@@ -1,0 +1,13 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Lawnmower icon, white on dark -->
+  <!-- Body -->
+  <rect x="2" y="11" width="15" height="6" rx="1.5" fill="white"/>
+  <!-- Handle -->
+  <path d="M17 11 L22 4" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <!-- Front wheel -->
+  <circle cx="5" cy="19" r="2" fill="white"/>
+  <!-- Rear wheel -->
+  <circle cx="14" cy="19" r="2.5" fill="white"/>
+  <!-- Blade (grass line) -->
+  <path d="M2 11 L17 11" stroke="white" stroke-width="1" opacity="0.4"/>
+</svg>

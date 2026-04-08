@@ -32,6 +32,8 @@ const App = () => (
     dealStages={dealStages}
     dealPipelineStatuses={dealPipelineStatuses}
     currency="EUR"
+    darkModeLogo="./logos/logo_tondix_dark.svg"
+    lightModeLogo="./logos/logo_tondix_light.svg"
     dataProvider={dataProvider}
     authProvider={authProvider}
     store={memoryStore()}
