@@ -41,6 +41,7 @@ import {
   ContextInfo,
 } from "./CompanyAside";
 import { CompanyAvatar } from "./CompanyAvatar";
+import { MachineContractList } from "../machines/MachineContractList";
 
 export const CompanyShow = () => {
   const isMobile = useIsMobile();
@@ -118,7 +119,7 @@ const CompanyShowContent = () => {
               <h5 className="text-xl ml-2 flex-1">{record.name}</h5>
             </div>
             <Tabs defaultValue={currentTab} onValueChange={handleTabChange}>
-              <TabsList className="grid w-full grid-cols-3">
+              <TabsList className="grid w-full grid-cols-4">
                 <TabsTrigger value="activity">
                   {translate("crm.common.activity")}
                 </TabsTrigger>
@@ -129,13 +130,14 @@ const CompanyShowContent = () => {
                         smart_count: record.nb_contacts ?? 0,
                       })}
                 </TabsTrigger>
-                {record.nb_deals ? (
-                  <TabsTrigger value="deals">
-                    {translate("resources.companies.nb_deals", {
-                      smart_count: record.nb_deals ?? 0,
-                    })}
-                  </TabsTrigger>
-                ) : null}
+                <TabsTrigger value="deals">
+                  {record.nb_deals
+                    ? translate("resources.companies.nb_deals", {
+                        smart_count: record.nb_deals,
+                      })
+                    : translate("resources.deals.name", { smart_count: 2 })}
+                </TabsTrigger>
+                <TabsTrigger value="machines">Parc machines</TabsTrigger>
               </TabsList>
               <TabsContent value="activity" className="pt-2">
                 <ActivityLog companyId={record.id} context="company" />
@@ -177,6 +179,9 @@ const CompanyShowContent = () => {
                     <DealsIterator />
                   </ReferenceManyField>
                 ) : null}
+              </TabsContent>
+              <TabsContent value="machines">
+                <CompanyMachinesTab companyId={record.id} />
               </TabsContent>
             </Tabs>
           </CardContent>
@@ -300,6 +305,61 @@ const DealsIterator = () => {
           </div>
         ))}
       </div>
+    </div>
+  );
+};
+
+const CompanyMachinesTab = ({ companyId }: { companyId: string | number }) => {
+  return (
+    <div className="mt-2">
+      <div className="flex justify-between items-center mb-3">
+        <h4 className="text-base font-semibold">Parc de tondeuses</h4>
+        <Button variant="outline" size="sm" asChild>
+          <RouterLink
+            to="/machines/create"
+            state={{ record: { company_id: companyId } }}
+            className="flex items-center gap-2"
+          >
+            Ajouter une machine
+          </RouterLink>
+        </Button>
+      </div>
+      <ReferenceManyField
+        reference="machines"
+        target="company_id"
+      >
+        <CompanyMachinesDataTable />
+      </ReferenceManyField>
+    </div>
+  );
+};
+
+const CompanyMachinesDataTable = () => {
+  const { data: machines, isPending } = useListContext();
+  if (isPending) return <p className="text-muted-foreground text-sm">Chargement...</p>;
+  if (!machines?.length) {
+    return <p className="text-muted-foreground text-sm">Aucune machine enregistrée.</p>;
+  }
+  return (
+    <div className="space-y-4">
+      {machines.map((machine) => (
+        <div key={machine.id} className="border rounded-lg p-3">
+          <div className="flex justify-between items-start">
+            <div>
+              <p className="font-medium">
+                {machine.modele_libre ?? `Machine #${machine.id}`}
+              </p>
+              {machine.numero_serie && (
+                <p className="text-sm text-muted-foreground">S/N: {machine.numero_serie}</p>
+              )}
+              {machine.date_achat && (
+                <p className="text-sm text-muted-foreground">Acheté le: {machine.date_achat}</p>
+              )}
+            </div>
+          </div>
+          <MachineContractList machineId={machine.id} />
+        </div>
+      ))}
     </div>
   );
 };
