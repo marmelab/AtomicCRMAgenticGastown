@@ -69,6 +69,7 @@ export type Company = {
   context_links?: string[];
   nb_contacts?: number;
   nb_deals?: number;
+  siret?: string;
 } & Pick<RaRecord, "id">;
 
 export type EmailAndType = {
@@ -125,6 +126,10 @@ export type Deal = {
   expected_closing_date: string;
   sales_id: Identifier;
   index: number;
+  deal_type?: "tondeuse" | "entretien";
+  product_id?: Identifier;
+  service_id?: Identifier;
+  machine_id?: Identifier;
 } & Pick<RaRecord, "id">;
 
 export type DealNote = {
@@ -151,6 +156,40 @@ export type Task = {
   due_date: string;
   done_date?: string | null;
   sales_id?: Identifier;
+} & Pick<RaRecord, "id">;
+
+export type Product = {
+  marque: string;
+  reference: string;
+  nom_commercial: string;
+  prix_ht: number;
+  description?: string;
+  active: boolean;
+} & Pick<RaRecord, "id">;
+
+export type Service = {
+  nom: string;
+  reference: string;
+  frequence: "annuel" | "semestriel" | "trimestriel";
+  prix_ht: number;
+  description_prestations?: string;
+  active: boolean;
+} & Pick<RaRecord, "id">;
+
+export type Machine = {
+  company_id: Identifier;
+  product_id?: Identifier;
+  modele_libre?: string;
+  numero_serie?: string;
+  date_achat?: string;
+} & Pick<RaRecord, "id">;
+
+export type MachineContract = {
+  machine_id: Identifier;
+  service_id: Identifier;
+  date_debut: string;
+  date_renouvellement: string;
+  statut: "actif" | "expiré" | "résilié";
 } & Pick<RaRecord, "id">;
 
 export type ActivityCompanyCreated = {
