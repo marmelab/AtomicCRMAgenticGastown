@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import type { InputProps } from "ra-core";
-import { useGetIdentity, useListContext, useTranslate } from "ra-core";
+import { useGetIdentity, useListContext, useListFilterContext, useTranslate } from "ra-core";
+import { Button } from "@/components/ui/button";
 import { matchPath, useLocation } from "react-router";
 import { AutocompleteInput } from "@/components/admin/autocomplete-input";
 import { CreateButton } from "@/components/admin/create-button";
@@ -95,8 +96,52 @@ const DealLayout = () => {
   );
 };
 
+const DEAL_TYPE_FILTER_KEY = "deal_type@eq";
+
+const DealTypeFilter = () => {
+  const { filterValues, setFilters } = useListFilterContext();
+  const currentType = filterValues[DEAL_TYPE_FILTER_KEY];
+
+  const setType = (type: string | undefined) => {
+    const newFilters = { ...filterValues };
+    if (type) {
+      newFilters[DEAL_TYPE_FILTER_KEY] = type;
+    } else {
+      delete newFilters[DEAL_TYPE_FILTER_KEY];
+    }
+    setFilters(newFilters, {});
+  };
+
+  return (
+    <div className="flex gap-2">
+      <Button
+        variant={!currentType ? "default" : "outline"}
+        size="sm"
+        onClick={() => setType(undefined)}
+      >
+        Tous
+      </Button>
+      <Button
+        variant={currentType === "tondeuse" ? "default" : "outline"}
+        size="sm"
+        onClick={() => setType("tondeuse")}
+      >
+        🚜 Tondeuses
+      </Button>
+      <Button
+        variant={currentType === "entretien" ? "default" : "outline"}
+        size="sm"
+        onClick={() => setType("entretien")}
+      >
+        🔧 Entretiens
+      </Button>
+    </div>
+  );
+};
+
 const DealActions = () => (
   <TopToolbar>
+    <DealTypeFilter />
     <FilterButton />
     <ExportButton />
     <CreateButton label="resources.deals.action.new" />
