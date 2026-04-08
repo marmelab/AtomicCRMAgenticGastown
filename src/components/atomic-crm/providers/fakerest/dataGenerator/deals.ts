@@ -1,7 +1,15 @@
 import { add } from "date-fns";
 import { datatype, lorem, random } from "faker/locale/en_US";
 
-import { defaultDealStages } from "../../../root/defaultConfiguration";
+// Use Tondix-specific stages so demo data matches the app configuration
+const tondixDealStages = [
+  { value: "prospect" },
+  { value: "qualification" },
+  { value: "demonstration" },
+  { value: "devis" },
+  { value: "negociation" },
+  { value: "commande" },
+];
 import type { Deal } from "../../../types";
 import type { Db } from "./types";
 import { randomDate } from "./utils";
@@ -32,7 +40,7 @@ export const generateDeals = (db: Db): Deal[] => {
 
     const dealType: "tondeuse" | "entretien" =
       id % 3 === 0 ? "entretien" : "tondeuse";
-    const stage = random.arrayElement(defaultDealStages).value;
+    const stage = random.arrayElement(tondixDealStages).value;
 
     // "commande" deals get a recent updated_at (current month/year) so the
     // RevenueWidget has data to display in demo mode
@@ -66,7 +74,7 @@ export const generateDeals = (db: Db): Deal[] => {
     };
   });
   // compute index based on stage
-  defaultDealStages.forEach((stage) => {
+  tondixDealStages.forEach((stage) => {
     deals
       .filter((deal) => deal.stage === stage.value)
       .forEach((deal, index) => {
