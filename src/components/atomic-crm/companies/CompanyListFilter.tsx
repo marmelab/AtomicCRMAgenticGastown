@@ -1,4 +1,4 @@
-import { Building, Truck, Users } from "lucide-react";
+import { Building, Truck, Users, Wrench } from "lucide-react";
 import { FilterLiveForm, useGetIdentity, useTranslate } from "ra-core";
 import { ToggleFilterButton } from "@/components/admin/toggle-filter-button";
 import { SearchInput } from "@/components/admin/search-input";
@@ -58,6 +58,22 @@ export const CompanyListFilter = () => {
           className="w-full justify-between"
           label={translate("crm.common.me")}
           value={{ sales_id: identity?.id }}
+        />
+      </FilterCategory>
+
+      <FilterCategory
+        icon={<Wrench className="h-4 w-4" />}
+        label="Parc machines"
+      >
+        <ToggleFilterButton
+          className="w-full justify-between"
+          label="Avec machines"
+          value={{ "nb_machines@gt": 0 }}
+        />
+        <ToggleFilterButton
+          className="w-full justify-between"
+          label="Avec contrats actifs"
+          value={{ "nb_active_contracts@gt": 0 }}
         />
       </FilterCategory>
     </div>

@@ -69,6 +69,8 @@ export type Company = {
   context_links?: string[];
   nb_contacts?: number;
   nb_deals?: number;
+  nb_machines?: number;
+  nb_active_contracts?: number;
   siret?: string;
 } & Pick<RaRecord, "id">;
 
