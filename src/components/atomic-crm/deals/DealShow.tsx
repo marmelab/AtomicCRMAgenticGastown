@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { isValid } from "date-fns";
-import { Archive, ArchiveRestore } from "lucide-react";
+import { Archive, ArchiveRestore, Wrench } from "lucide-react";
+import { Link } from "react-router";
 import {
   InfiniteListBase,
   ShowBase,
@@ -167,6 +168,10 @@ const DealShowContent = () => {
           )}
 
           <div className="m-4">
+            <UpSellMaintenanceButton />
+          </div>
+
+          <div className="m-4">
             <Separator className="mb-4" />
             <InfiniteListBase
               resource="deal_notes"
@@ -183,6 +188,30 @@ const DealShowContent = () => {
         </div>
       </div>
     </>
+  );
+};
+
+const UpSellMaintenanceButton = () => {
+  const record = useRecordContext<Deal>();
+  if (!record) return null;
+  if (record.stage !== "commande" || record.deal_type !== "tondeuse") return null;
+
+  const params = new URLSearchParams({
+    source: JSON.stringify({
+      deal_type: "entretien",
+      company_id: record.company_id,
+      contact_ids: record.contact_ids,
+      name: `Entretien — ${record.name}`,
+    }),
+  });
+
+  return (
+    <Link to={`/deals/create?${params}`}>
+      <Button variant="outline" size="sm" className="gap-2 border-green-500 text-green-700 hover:bg-green-50">
+        <Wrench className="h-4 w-4" />
+        Proposer un contrat d'entretien
+      </Button>
+    </Link>
   );
 };
 
