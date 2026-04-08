@@ -6,6 +6,8 @@ import { TextInput } from "@/components/admin/text-input";
 import { NumberInput } from "@/components/admin/number-input";
 import { DateInput } from "@/components/admin/date-input";
 import { SelectInput } from "@/components/admin/select-input";
+import { useWatch } from "react-hook-form";
+import { AutocompleteInput } from "@/components/admin/autocomplete-input";
 import { Separator } from "@/components/ui/separator";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -64,8 +66,10 @@ const DealLinkedToInputs = () => {
 };
 
 const DealMiscInputs = () => {
-  const { dealStages, dealCategories } = useConfigurationContext();
+  const { dealStages } = useConfigurationContext();
   const translate = useTranslate();
+  const dealType = useWatch({ name: "deal_type", defaultValue: "tondeuse" });
+
   return (
     <div className="flex flex-col gap-4 flex-1">
       <h3 className="text-base font-medium">
@@ -73,18 +77,47 @@ const DealMiscInputs = () => {
       </h3>
 
       <SelectInput
-        source="category"
-        choices={dealCategories}
-        optionText="label"
-        optionValue="value"
+        source="deal_type"
+        label="Type"
+        choices={[
+          { id: "tondeuse", name: "🚜 Tondeuse" },
+          { id: "entretien", name: "🔧 Entretien" },
+        ]}
+        defaultValue="tondeuse"
         helperText={false}
       />
-      <NumberInput
-        source="amount"
-        defaultValue={0}
-        helperText={false}
-        validate={required()}
-      />
+
+      {dealType === "tondeuse" && (
+        <ReferenceInput source="product_id" reference="products" filter={{ "active@eq": true }}>
+          <AutocompleteInput
+            label="Tondeuse (catalogue)"
+            optionText="nom_commercial"
+            helperText={false}
+          />
+        </ReferenceInput>
+      )}
+
+      {dealType === "entretien" && (
+        <ReferenceInput source="service_id" reference="services" filter={{ "active@eq": true }}>
+          <AutocompleteInput
+            label="Contrat d'entretien"
+            optionText="nom"
+            helperText={false}
+          />
+        </ReferenceInput>
+      )}
+
+      {dealType === "entretien" && (
+        <ReferenceInput source="machine_id" reference="machines">
+          <AutocompleteInput
+            label="Machine concernée (optionnel)"
+            optionText={(record: any) => record?.numero_serie ?? record?.modele_libre ?? `Machine #${record?.id}`}
+            helperText={false}
+          />
+        </ReferenceInput>
+      )}
+
+      <NumberInput source="amount" defaultValue={0} helperText={false} validate={required()} />
       <DateInput
         validate={required()}
         source="expected_closing_date"
@@ -96,7 +129,7 @@ const DealMiscInputs = () => {
         choices={dealStages}
         optionText="label"
         optionValue="value"
-        defaultValue="opportunity"
+        defaultValue="prospect"
         helperText={false}
         validate={required()}
       />
