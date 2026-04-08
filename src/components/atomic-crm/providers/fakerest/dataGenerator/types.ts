@@ -4,6 +4,8 @@ import type {
   ContactNote,
   Deal,
   DealNote,
+  Machine,
+  MachineContract,
   Product,
   Sale,
   Service,
@@ -24,6 +26,6 @@ export interface Db {
   configuration: Array<{ id: number; config: ConfigurationContextValue }>;
   products: Product[];
   services: Service[];
-  machines: any[];
-  machine_contracts: any[];
+  machines: Machine[];
+  machine_contracts: MachineContract[];
 }
