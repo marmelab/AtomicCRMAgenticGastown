@@ -13,10 +13,32 @@ const guesserMessages = {
   },
 };
 
+const customMessages = {
+  resources: {
+    products: {
+      name: "Tondeuse |||| Tondeuses",
+      action: { new: "Ajouter une tondeuse" },
+    },
+    services: {
+      name: "Contrat d'entretien |||| Contrats d'entretien",
+      action: { new: "Ajouter un contrat" },
+    },
+    machines: {
+      name: "Machine |||| Parc machines",
+      action: { new: "Ajouter une machine" },
+    },
+    machine_contracts: {
+      name: "Contrat |||| Contrats",
+      action: { new: "Ajouter un contrat" },
+    },
+  },
+};
+
 export const i18nProvider = polyglotI18nProvider(
   () =>
     ({
       ...defaultMessages,
+      ...customMessages,
       ra: {
         ...defaultMessages.ra,
         ...guesserMessages,
