@@ -7,6 +7,5 @@ export default {
   list: MaintenanceList,
   create: MaintenanceCreate,
   edit: MaintenanceEdit,
-  recordRepresentation: (record: Service) =>
-    `${record.nom} (${record.frequence} — ${record.prix_ht} €)`,
+  recordRepresentation: (record: Service) => `${record.nom} — ${record.reference}`,
 };
