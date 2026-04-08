@@ -1,13 +1,16 @@
 import { add } from "date-fns";
 import { datatype, lorem, random } from "faker/locale/en_US";
 
-import {
-  defaultDealCategories,
-  defaultDealStages,
-} from "../../../root/defaultConfiguration";
+import { defaultDealStages } from "../../../root/defaultConfiguration";
 import type { Deal } from "../../../types";
 import type { Db } from "./types";
 import { randomDate } from "./utils";
+
+const daysAgo = (n: number) => {
+  const d = new Date();
+  d.setDate(d.getDate() - n);
+  return d;
+};
 
 export const generateDeals = (db: Db): Deal[] => {
   const deals = Array.from(Array(50).keys()).map((id) => {
@@ -27,17 +30,36 @@ export const generateDeals = (db: Db): Deal[] => {
       .toISOString()
       .split("T")[0];
 
+    const dealType: "tondeuse" | "entretien" =
+      id % 3 === 0 ? "entretien" : "tondeuse";
+    const stage = random.arrayElement(defaultDealStages).value;
+
+    // "commande" deals get a recent updated_at (current month/year) so the
+    // RevenueWidget has data to display in demo mode
+    const updatedAt =
+      stage === "commande"
+        ? randomDate(daysAgo(60), daysAgo(1)).toISOString()
+        : randomDate(new Date(created_at)).toISOString();
+
     return {
       id,
       name: lowercaseName[0].toUpperCase() + lowercaseName.slice(1),
       company_id: company.id,
       contact_ids: contacts.map((contact) => contact.id),
-      category: random.arrayElement(defaultDealCategories).value,
-      stage: random.arrayElement(defaultDealStages).value,
+      stage,
+      deal_type: dealType,
+      product_id:
+        dealType === "tondeuse" && db.products?.length
+          ? db.products[id % db.products.length].id
+          : undefined,
+      service_id:
+        dealType === "entretien" && db.services?.length
+          ? db.services[id % db.services.length].id
+          : undefined,
       description: lorem.paragraphs(datatype.number({ min: 1, max: 4 })),
       amount: datatype.number(1000) * 100,
       created_at,
-      updated_at: randomDate(new Date(created_at)).toISOString(),
+      updated_at: updatedAt,
       expected_closing_date,
       sales_id: company.sales_id!,
       index: 0,
