@@ -69,6 +69,7 @@ const DealMiscInputs = () => {
   const { dealStages } = useConfigurationContext();
   const translate = useTranslate();
   const dealType = useWatch({ name: "deal_type", defaultValue: "tondeuse" });
+  const companyId = useWatch({ name: "company_id" });
 
   return (
     <div className="flex flex-col gap-4 flex-1">
@@ -108,10 +109,18 @@ const DealMiscInputs = () => {
       )}
 
       {dealType === "entretien" && (
-        <ReferenceInput source="machine_id" reference="machines">
+        <ReferenceInput
+          source="machine_id"
+          reference="machines"
+          filter={companyId ? { "company_id@eq": companyId } : {}}
+        >
           <AutocompleteInput
             label="Machine concernée (optionnel)"
-            optionText={(record: any) => record?.numero_serie ?? record?.modele_libre ?? `Machine #${record?.id}`}
+            optionText={(record: any) =>
+              record?.modele_libre ??
+              record?.numero_serie ??
+              `Machine #${record?.id}`
+            }
             helperText={false}
           />
         </ReferenceInput>

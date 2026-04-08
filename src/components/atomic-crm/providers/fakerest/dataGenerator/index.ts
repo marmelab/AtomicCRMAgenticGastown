@@ -5,6 +5,7 @@ import { generateDealNotes } from "./dealNotes";
 import { generateDeals } from "./deals";
 import { finalize } from "./finalize";
 import { generateMaintenance } from "./maintenance";
+import { generateMachines, generateMachineContracts } from "./machines";
 import { generateProducts } from "./products";
 import { generateSales } from "./sales";
 import { generateTags } from "./tags";
@@ -29,8 +30,8 @@ export default (): Db => {
   ];
   db.products = generateProducts();
   db.services = generateMaintenance();
-  db.machines = [];
-  db.machine_contracts = [];
+  db.machines = generateMachines(db);
+  db.machine_contracts = generateMachineContracts(db);
   finalize(db);
 
   return db;
