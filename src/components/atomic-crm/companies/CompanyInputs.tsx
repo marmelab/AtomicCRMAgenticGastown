@@ -149,6 +149,7 @@ const CompanyAdditionalInformationInputs = () => {
           _: "Additional information",
         })}
       </h6>
+      <TextInput source="siret" label="SIRET" helperText={false} />
       <TextInput source="description" multiline helperText={false} />
       <ArrayInput source="context_links" helperText={false}>
         <SimpleFormIterator disableReordering fullWidth getItemLabel={false}>
