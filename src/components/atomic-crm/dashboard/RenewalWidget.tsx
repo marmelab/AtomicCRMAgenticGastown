@@ -24,7 +24,7 @@ export const RenewalWidget = () => {
   });
 
   const daysUntil = (dateStr: string) => {
-    const diff = new Date(dateStr).getTime() - Date.now();
+    const diff = new Date(dateStr + "T00:00:00Z").getTime() - new Date(today() + "T00:00:00Z").getTime();
     return Math.ceil(diff / (1000 * 60 * 60 * 24));
   };
 
