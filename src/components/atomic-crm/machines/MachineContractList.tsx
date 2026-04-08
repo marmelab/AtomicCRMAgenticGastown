@@ -1,9 +1,9 @@
-import { useGetList } from "ra-core";
+import { useGetList, useGetMany } from "ra-core";
 import { Link } from "react-router";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import type { MachineContract } from "../types";
+import type { MachineContract, Service } from "../types";
 
 const STATUT_COLORS: Record<string, string> = {
   actif: "border-green-400 text-green-700",
@@ -17,6 +17,9 @@ export const MachineContractList = ({ machineId }: { machineId: string | number 
     sort: { field: "date_renouvellement", order: "ASC" },
     filter: { "machine_id@eq": machineId },
   });
+  const serviceIds = contracts?.map((c) => c.service_id) ?? [];
+  const { data: services } = useGetMany<Service>("services", { ids: serviceIds }, { enabled: serviceIds.length > 0 });
+  const serviceMap = Object.fromEntries((services ?? []).map((s) => [s.id, s.nom]));
 
   return (
     <div className="mt-3 ml-2 border-l-2 border-muted pl-3">
@@ -36,7 +39,7 @@ export const MachineContractList = ({ machineId }: { machineId: string | number 
         <div className="space-y-1">
           {contracts.map((c) => (
             <div key={c.id} className="flex justify-between items-center text-xs">
-              <span>Contrat #{c.service_id} — renouvellement le {c.date_renouvellement}</span>
+              <span>{serviceMap[c.service_id] ?? `Contrat #${c.service_id}`} — renouvellement le {c.date_renouvellement}</span>
               <Badge variant="outline" className={`text-xs ${STATUT_COLORS[c.statut] ?? ""}`}>
                 {c.statut}
               </Badge>

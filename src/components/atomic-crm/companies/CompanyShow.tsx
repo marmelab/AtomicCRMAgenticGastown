@@ -7,6 +7,7 @@ import { UserPlus } from "lucide-react";
 import {
   RecordContextProvider,
   ShowBase,
+  useGetMany,
   useListContext,
   useLocaleState,
   useRecordContext,
@@ -32,7 +33,7 @@ import { MobileBackButton } from "../misc/MobileBackButton";
 import { formatRelativeDate } from "../misc/RelativeDate";
 import { Status } from "../misc/Status";
 import { useConfigurationContext } from "../root/ConfigurationContext";
-import type { Company, Contact, Deal } from "../types";
+import type { Company, Contact, Deal, Product } from "../types";
 import {
   AdditionalInfo,
   AddressInfo,
@@ -336,6 +337,10 @@ const CompanyMachinesTab = ({ companyId }: { companyId: string | number }) => {
 
 const CompanyMachinesDataTable = () => {
   const { data: machines, isPending } = useListContext();
+  const productIds = (machines ?? []).map((m) => m.product_id).filter(Boolean);
+  const { data: products } = useGetMany<Product>("products", { ids: productIds }, { enabled: productIds.length > 0 });
+  const productMap = Object.fromEntries((products ?? []).map((p) => [p.id, p.nom_commercial]));
+
   if (isPending) return <p className="text-muted-foreground text-sm">Chargement...</p>;
   if (!machines?.length) {
     return <p className="text-muted-foreground text-sm">Aucune machine enregistrée.</p>;
@@ -347,7 +352,10 @@ const CompanyMachinesDataTable = () => {
           <div className="flex justify-between items-start">
             <div>
               <p className="font-medium">
-                {machine.modele_libre ?? `Machine #${machine.id}`}
+                {machine.product_id
+                  ? (productMap[machine.product_id] ?? machine.modele_libre ?? `Machine #${machine.id}`)
+                  : (machine.modele_libre ?? `Machine #${machine.id}`)
+                }
               </p>
               {machine.numero_serie && (
                 <p className="text-sm text-muted-foreground">S/N: {machine.numero_serie}</p>
