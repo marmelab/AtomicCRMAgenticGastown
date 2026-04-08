@@ -3,6 +3,8 @@ import { MachineEdit } from "./MachineEdit";
 import { MachineList } from "./MachineList";
 
 export { MachineInputs } from "./MachineInputs";
+export { MachineContractList } from "./MachineContractList";
+export { MachineContractCreate } from "./MachineContractCreate";
 
 export default {
   list: MachineList,

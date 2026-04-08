@@ -33,6 +33,7 @@ import sales from "../sales";
 import products from "../products";
 import maintenance from "../maintenance";
 import machines from "../machines";
+import { MachineContractCreate } from "../machines";
 import { SettingsPageMobile } from "../settings/SettingsPageMobile";
 import { ProfilePage } from "../settings/ProfilePage";
 import { SettingsPage } from "../settings/SettingsPage";
@@ -277,7 +278,7 @@ const DesktopAdmin = (
       <Resource name="products" {...products} />
       <Resource name="services" {...maintenance} />
       <Resource name="machines" {...machines} />
-      <Resource name="machine_contracts" />
+      <Resource name="machine_contracts" create={MachineContractCreate} />
     </Admin>
   );
 };
