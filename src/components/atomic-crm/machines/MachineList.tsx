@@ -17,9 +17,7 @@ const ModelField = (_props: { label?: string | boolean }) => {
   return (
     <span>
       {record.product_id ? (
-        <ReferenceField source="product_id" reference="products" link={false}>
-          <span />
-        </ReferenceField>
+        <ReferenceField source="product_id" reference="products" link={false} />
       ) : (
         record.modele_libre ?? "—"
       )}
